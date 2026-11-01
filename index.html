@@ -1,24 +1,417 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Pocket – Legal</title>
-  <style>
-    body { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; display: flex; align-items: center; justify-content: center; min-height: 100vh; margin: 0; background: #f9f9f9; }
-    .card { background: #fff; border-radius: 12px; padding: 48px 40px; text-align: center; box-shadow: 0 2px 12px rgba(0,0,0,.08); max-width: 380px; width: 90%; }
-    h1 { font-size: 1.6rem; margin-bottom: 6px; }
-    p { color: #666; font-size: 0.95rem; margin-bottom: 32px; }
-    a { display: block; padding: 14px; border-radius: 8px; background: #0066cc; color: #fff; text-decoration: none; font-weight: 600; margin-bottom: 12px; }
-    a:hover { background: #0052a3; }
-  </style>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Pocket – gift card, voucher &amp; coupon wallet for Android</title>
+<meta name="description" content="Pocket keeps every gift card, voucher, coupon and loyalty card in one place. Snap a photo and AI fills in the details, track what's left on each card, and get a reminder before anything expires. Free on Google Play.">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Pocket">
+<meta property="og:title" content="Pocket – the money you already own shouldn't expire">
+<meta property="og:description" content="Every gift card, voucher, coupon and loyalty card in one wallet, with balances and a nudge before anything expires. Free on Android.">
+<meta name="theme-color" content="#24405f">
+<link rel="icon" href="favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Alfa+Slab+One&family=Karla:wght@400;600;800&family=Courier+Prime:wght@700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --denim: #2a4a70;
+    --denim-dark: #1b3150;
+    --denim-light: #3d6694;
+    --thread: #e3a13b;
+    --leather: #7b4a2c;
+    --leather-dark: #563220;
+    --cream: #fff8f4;
+    --ink: #2e1c14;
+    --violet: #8b5cf6;
+    --violet-deep: #6d3fd4;
+    --sage: #6fb88a;
+    --sage-deep: #357555;
+    --copper: #c27a3c;
+    /* ponytail: fake fabric = two diagonal twill gradients + svg noise, no images */
+    --twill:
+      repeating-linear-gradient(135deg, rgba(255,255,255,.055) 0 1px, transparent 1px 3px),
+      repeating-linear-gradient(45deg, rgba(0,0,0,.14) 0 1px, transparent 1px 4px),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='.9' numOctaves='2'/%3E%3CfeColorMatrix values='0 0 0 0 1 0 0 0 0 1 0 0 0 0 1 0 0 0 .09 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  }
+  * { box-sizing: border-box; }
+  html { background: var(--denim-dark); }
+  body {
+    margin: 0;
+    min-height: 100vh;
+    font: 17px/1.55 Karla, system-ui, sans-serif;
+    color: var(--cream);
+    background-color: var(--denim);
+    background-image:
+      radial-gradient(ellipse 70% 55% at 50% 28%, rgba(255,255,255,.13), transparent 70%),
+      radial-gradient(ellipse 120% 90% at 50% 50%, transparent 55%, rgba(0,0,0,.35)),
+      var(--twill);
+    overflow-x: hidden;
+  }
+  a { color: inherit; }
+
+  /* the yoke seam across the top of the jeans */
+  .yoke {
+    height: 64px;
+    border-bottom: 2px solid rgba(0,0,0,.25);
+    box-shadow: 0 1px 0 rgba(255,255,255,.08);
+    position: relative;
+  }
+  .yoke::before, .yoke::after {
+    content: ""; position: absolute; left: 0; right: 0;
+    border-top: 2px dashed var(--thread);
+    opacity: .85;
+  }
+  .yoke::before { bottom: 10px; }
+  .yoke::after { bottom: 18px; }
+
+  main { max-width: 620px; margin: 0 auto; padding: 0 16px 64px; }
+
+  /* leather back patch */
+  .patch {
+    position: relative;
+    margin: -34px auto 0;
+    width: min(330px, 100%);
+    padding: 18px 26px 16px;
+    background:
+      radial-gradient(ellipse at 30% 20%, rgba(255,255,255,.12), transparent 60%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='120' height='120'%3E%3Cfilter id='l'%3E%3CfeTurbulence baseFrequency='.35' numOctaves='3'/%3E%3CfeColorMatrix values='0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 .22 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23l)'/%3E%3C/svg%3E"),
+      var(--leather);
+    border-radius: 6px 6px 10px 10px / 6px 6px 14px 14px;
+    box-shadow: 0 6px 14px rgba(0,0,0,.35), inset 0 0 0 1px rgba(0,0,0,.3);
+    transform: rotate(-1.5deg);
+    text-align: center;
+  }
+  .patch::before {
+    content: ""; position: absolute; inset: 6px;
+    border: 2px dashed rgba(255,226,180,.6);
+    border-radius: 4px 4px 8px 8px;
+    pointer-events: none;
+  }
+  .patch .brand {
+    margin: 0;
+    font: 400 52px/1 "Alfa Slab One", serif;
+    letter-spacing: .04em;
+    color: var(--leather-dark);
+    text-shadow: 0 1px 0 rgba(255,255,255,.22), 0 -1px 0 rgba(0,0,0,.45);
+  }
+  .patch .kind {
+    margin: 6px 0 0;
+    font: 700 12px/1.3 "Courier Prime", monospace;
+    letter-spacing: .12em;
+    text-transform: uppercase;
+    color: #f1d9bd;
+  }
+  .rivet {
+    position: absolute; top: 50%; width: 14px; height: 14px; margin-top: -7px;
+    border-radius: 50%;
+    background: radial-gradient(circle at 35% 35%, #ffd9a8, var(--copper) 45%, #6b3a17);
+    box-shadow: 0 1px 2px rgba(0,0,0,.6);
+  }
+  .rivet.l { left: -7px; } .rivet.r { right: -7px; }
+
+  .hero { text-align: center; margin-top: 34px; }
+  .hero h1 {
+    margin: 0 auto; max-width: 15em;
+    font: 400 38px/1.12 "Alfa Slab One", serif; color: #fff;
+    text-shadow: 0 2px 0 rgba(0,0,0,.25);
+  }
+  .lede {
+    text-align: center;
+    margin: 16px auto 0;
+    max-width: 30em;
+    color: #dbe6f3;
+  }
+  .lede strong { color: #fff; }
+  .cta { text-align: center; margin-top: 22px; }
+  .cta .btn { font-size: 17px; padding: 15px 22px; }
+  .cta small { display: block; margin-top: 12px; font-size: 14px; color: #b9cbe0; }
+
+  /* the back pocket */
+  .pocket-wrap { position: relative; padding-top: 108px; margin-top: 18px; }
+  .peek {
+    position: absolute; top: 44px; width: 200px; height: 124px;
+    border-radius: 12px; padding: 14px 16px;
+    font-weight: 800; color: #fff;
+    box-shadow: 0 -2px 10px rgba(0,0,0,.25);
+    transition: transform .35s cubic-bezier(.3,1.6,.5,1);
+  }
+  .peek small { display: block; font: 700 11px "Courier Prime", monospace; letter-spacing: .14em; opacity: .85; }
+  .peek b { display: block; font: 400 30px/1.1 "Alfa Slab One", serif; margin-top: 4px; }
+  .peek.gift {
+    left: 12%; transform: rotate(-9deg);
+    background: linear-gradient(135deg, var(--violet), var(--violet-deep));
+  }
+  .peek.gift::after { /* chip */
+    content: ""; position: absolute; right: 16px; top: 16px; width: 30px; height: 22px; border-radius: 5px;
+    background: linear-gradient(135deg, #f6d48a, #c9973e);
+  }
+  .peek.coupon {
+    right: 10%; top: 56px; transform: rotate(7deg);
+    color: var(--ink);
+    background:
+      radial-gradient(circle at 0 50%, transparent 9px, #fff 10px) left / 51% 100% no-repeat,
+      radial-gradient(circle at 100% 50%, transparent 9px, #fff 10px) right / 51% 100% no-repeat;
+    border-radius: 6px;
+  }
+  .peek.coupon b { color: var(--sage-deep); }
+  .pocket-wrap:hover .peek.gift { transform: rotate(-12deg) translateY(-14px); }
+  .pocket-wrap:hover .peek.coupon { transform: rotate(10deg) translateY(-10px); }
+
+  .pocket {
+    position: relative; z-index: 1;
+    padding: 46px 9% 150px;
+    background-color: var(--denim-light);
+    background-image:
+      linear-gradient(rgba(0,0,0,.18), transparent 22px),
+      radial-gradient(ellipse at 50% 0, rgba(255,255,255,.12), transparent 70%),
+      var(--twill);
+    clip-path: polygon(0 0, 100% 0, 100% calc(100% - 110px), 50% 100%, 0 calc(100% - 110px));
+    filter: drop-shadow(0 10px 18px rgba(0,0,0,.35));
+  }
+  /* folded hem at the pocket mouth, double-stitched */
+  .pocket::before {
+    content: ""; position: absolute; left: 0; right: 0; top: 0; height: 30px;
+    border-bottom: 2px dashed var(--thread);
+    background: linear-gradient(rgba(255,255,255,.06), rgba(0,0,0,.12));
+  }
+  .pocket::after {
+    content: ""; position: absolute; left: 0; right: 0; top: 8px;
+    border-top: 2px dashed var(--thread);
+  }
+  /* side stitching + V bottom stitching */
+  .stitch-sides {
+    position: absolute; left: 3.5%; right: 3.5%; top: 30px; bottom: 120px;
+    border: 2px dashed var(--thread); border-top: 0; border-bottom: 0;
+    pointer-events: none;
+  }
+  .stitch-v {
+    position: absolute; left: 0; bottom: 0; width: 100%; height: 120px;
+    pointer-events: none; overflow: visible;
+  }
+  .stitch-v line { stroke: var(--thread); stroke-width: 2; stroke-dasharray: 7 5; }
+
+  .tab { /* little side tab sewn into the pocket seam */
+    position: absolute; z-index: 2; right: -4px; top: 190px;
+    background: var(--violet); color: #fff;
+    font: 700 11px "Courier Prime", monospace; letter-spacing: .2em;
+    padding: 5px 10px 5px 12px; border-radius: 3px 0 0 3px;
+    box-shadow: 0 2px 4px rgba(0,0,0,.35);
+  }
+
+  h2 {
+    font: 400 30px/1.15 "Alfa Slab One", serif;
+    margin: 6px 0 4px; color: #fff;
+    text-shadow: 0 2px 0 rgba(0,0,0,.25);
+  }
+  .sub { margin: 0 0 22px; color: #dbe6f3; }
+
+  ol.steps { list-style: none; margin: 0; padding: 0; counter-reset: s; }
+  ol.steps li {
+    position: relative; counter-increment: s;
+    padding: 0 0 22px 52px;
+  }
+  ol.steps li::before {
+    content: counter(s);
+    position: absolute; left: 0; top: -2px;
+    width: 36px; height: 36px; border-radius: 50%;
+    display: grid; place-items: center;
+    font: 400 17px "Alfa Slab One", serif; color: #3d1f0c;
+    background: radial-gradient(circle at 35% 30%, #ffe0b5, var(--copper) 55%, #7a4119);
+    box-shadow: 0 2px 3px rgba(0,0,0,.45), inset 0 0 0 3px rgba(0,0,0,.12);
+  }
+  ol.steps li h3 { margin: 4px 0 4px; font-size: 18px; font-weight: 800; color: #fff; }
+  ol.steps li p { margin: 0 0 10px; color: #cfdcec; font-size: 15px; }
+
+  .btn {
+    display: inline-flex; align-items: center; gap: 8px;
+    font: 800 15px Karla, sans-serif; letter-spacing: .03em;
+    color: var(--cream); text-decoration: none;
+    padding: 13px 18px;
+    background: var(--leather);
+    border: 0; border-radius: 4px; cursor: pointer;
+    outline: 1.5px dashed rgba(255,226,180,.55); outline-offset: -6px;
+    box-shadow: 0 3px 0 var(--leather-dark), 0 5px 10px rgba(0,0,0,.3);
+    transition: transform .08s, box-shadow .08s;
+  }
+  .btn:hover { background: #8a5534; }
+  .btn:active { transform: translateY(2px); box-shadow: 0 1px 0 var(--leather-dark), 0 2px 5px rgba(0,0,0,.3); }
+  .btn:focus-visible { box-shadow: 0 0 0 3px var(--thread); }
+  .btn.alt { background: var(--cream); color: var(--ink); outline-color: rgba(46,28,20,.35); box-shadow: 0 3px 0 #c9b9ae, 0 5px 10px rgba(0,0,0,.3); }
+  .btn.alt:hover { background: #fff; }
+
+  /* the paper care label at the bottom */
+  .label {
+    margin: 34px auto 0; max-width: 420px;
+    background: var(--cream); color: var(--ink);
+    padding: 16px 22px 14px;
+    font: 700 13px/1.6 "Courier Prime", monospace;
+    box-shadow: 0 4px 10px rgba(0,0,0,.3);
+    transform: rotate(.8deg);
+    position: relative;
+  }
+  .label::before, .label::after { /* stitched to the denim at the top */
+    content: ""; position: absolute; top: 6px; left: 8px; right: 8px;
+    border-top: 1.5px dashed rgba(46,28,20,.35);
+  }
+  .label::after { top: auto; bottom: 6px; }
+  .label h4 { margin: 0 0 6px; font: 400 15px "Alfa Slab One", serif; letter-spacing: .06em; }
+  .label ul { margin: 0; padding-left: 18px; }
+  .label a { color: var(--violet-deep); }
+
+  /* feature patches: denim squares sewn on with thread */
+  .features { margin-top: 44px; }
+  .features > h2 { text-align: center; margin-bottom: 18px; }
+  .grid { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .grid li {
+    position: relative; padding: 18px 18px 16px;
+    background: rgba(0,0,0,.16);
+    border-radius: 8px;
+    outline: 2px dashed rgba(227,161,59,.7); outline-offset: -7px;
+    box-shadow: inset 0 1px 0 rgba(255,255,255,.06), 0 3px 8px rgba(0,0,0,.2);
+  }
+  .grid h3 { margin: 0 0 6px; font-size: 18px; font-weight: 800; color: #fff; }
+  .grid h3 span { display: inline-block; width: 1.4em; color: var(--thread); }
+  .grid p { margin: 0; color: #cfdcec; font-size: 15px; }
+  .why { text-align: center; margin: 22px auto 0; max-width: 32em; color: #dbe6f3; font-size: 16px; }
+  .why strong { color: #fff; }
+
+  .closing { text-align: center; margin-top: 40px; }
+  .closing h2 { margin-bottom: 8px; }
+  .closing p { margin: 0 auto 4px; max-width: 28em; color: #dbe6f3; }
+
+  footer { text-align: center; margin-top: 36px; font-size: 13px; color: #9fb4cd; }
+  footer nav { margin-bottom: 6px; font-size: 14px; }
+  footer nav a { color: #dbe6f3; margin: 0 8px; }
+  footer p { margin: 4px 0; }
+
+  @media (max-width: 480px) {
+    .patch .brand { font-size: 42px; }
+    .hero h1 { font-size: 29px; }
+    .grid { grid-template-columns: 1fr; }
+    .peek { width: 160px; height: 104px; }
+    .peek b { font-size: 24px; }
+    .peek.gift { left: 2%; } .peek.coupon { right: 0; }
+    .pocket { padding: 44px 8% 140px; }
+    .tab { top: 160px; }
+    h2 { font-size: 25px; }
+    ol.steps li { padding-left: 46px; }
+  }
+  @media (prefers-reduced-motion: reduce) { .peek { transition: none; } }
+</style>
 </head>
 <body>
-  <div class="card">
-    <h1>Pocket</h1>
-    <p>Your digital loyalty card wallet</p>
-    <a href="privacy.html">Privacy Policy</a>
-    <a href="terms.html">Terms of Service</a>
-  </div>
+  <div class="yoke" aria-hidden="true"></div>
+
+  <main>
+    <header class="patch">
+      <span class="rivet l" aria-hidden="true"></span>
+      <span class="rivet r" aria-hidden="true"></span>
+      <p class="brand">POCKET</p>
+      <p class="kind">Gift cards · Vouchers · Coupons</p>
+    </header>
+
+    <section class="hero" aria-labelledby="hero-title">
+      <h1 id="hero-title">The money you already own shouldn't expire.</h1>
+      <p class="lede">
+        Pocket keeps every gift card, voucher, coupon and loyalty card in one place.
+        It <strong>tracks what's left on each one</strong> and <strong>reminds you before anything expires</strong>.
+      </p>
+      <div class="cta">
+        <a class="btn" href="https://play.google.com/store/apps/details?id=com.aviadlavi.pocket" target="_blank" rel="noopener">Get Pocket on Google Play ↗</a>
+        <small>Free on Android · English and Hebrew</small>
+      </div>
+    </section>
+
+    <div class="pocket-wrap">
+      <div class="peek gift" aria-hidden="true"><small>GIFT CARD</small><b>₪200</b></div>
+      <div class="peek coupon" aria-hidden="true"><small>COUPON</small><b>20% OFF</b></div>
+
+      <section class="pocket" aria-labelledby="how-title">
+        <div class="stitch-sides" aria-hidden="true"></div>
+        <svg class="stitch-v" aria-hidden="true">
+          <line x1="3.5%" y1="0" x2="50%" y2="104" />
+          <line x1="96.5%" y1="0" x2="50%" y2="104" />
+        </svg>
+
+        <h2 id="how-title">How it works</h2>
+        <p class="sub">Photograph the card. That's the whole setup.</p>
+
+        <ol class="steps">
+          <li>
+            <h3>Snap a photo</h3>
+            <p>Point the camera at a card, a screenshot or a confirmation email. AI reads the store, code, balance and expiry date for you. No typing.</p>
+          </li>
+          <li>
+            <h3>Spend it at the till</h3>
+            <p>Show the barcode or QR code at checkout. Spent part of it? Log it and Pocket keeps the rest of the balance alive.</p>
+          </li>
+          <li>
+            <h3>Get a nudge before it expires</h3>
+            <p>Pocket reminds you 7, 3 and 1 day before a card runs out, so the money gets spent by you.</p>
+          </li>
+        </ol>
+      </section>
+      <span class="tab" aria-hidden="true">FREE</span>
+    </div>
+
+    <section class="features" aria-labelledby="features-title">
+      <h2 id="features-title">What's in your Pocket</h2>
+      <ul class="grid">
+        <li>
+          <h3><span aria-hidden="true">◉</span>AI card capture</h3>
+          <p>One photo and the details are filled in: store name, code, value and expiry.</p>
+        </li>
+        <li>
+          <h3><span aria-hidden="true">₪</span>Partial balances</h3>
+          <p>Spend ₪180 of a ₪200 card and Pocket keeps track of the ₪20 that's left, with a full transaction history.</p>
+        </li>
+        <li>
+          <h3><span aria-hidden="true">◷</span>Expiry reminders</h3>
+          <p>A notification before anything expires, so you never find a dead card at the back of a drawer again.</p>
+        </li>
+        <li>
+          <h3><span aria-hidden="true">⌖</span>Where to spend it</h3>
+          <p>A map of nearby shops that accept the cards you're already holding.</p>
+        </li>
+      </ul>
+      <p class="why">
+        <strong>Pocket is independent.</strong> It isn't run by a card issuer or a bank, and it earns nothing when your card expires.
+        Its only job is making sure you spend what's yours.
+      </p>
+    </section>
+
+    <aside class="label" aria-labelledby="care-title">
+      <h4 id="care-title">CARE INSTRUCTIONS</h4>
+      <ul>
+        <li>Free to use. Unlimited cards, reminders, the map and 10 AI scans a year.</li>
+        <li>Pocket PRO adds unlimited AI scans and no ads.</li>
+        <li>Share cards with your partner or family.</li>
+        <li>English and Hebrew, with full right-to-left support.</li>
+        <li>Your cards are private to your account. Export everything to JSON anytime.</li>
+        <li>Android only, for now.</li>
+      </ul>
+    </aside>
+
+    <section class="closing" aria-labelledby="closing-title">
+      <h2 id="closing-title">Empty the drawer.</h2>
+      <p>Put every card in your Pocket in a minute, and stop losing money to expiry dates.</p>
+      <div class="cta">
+        <a class="btn" href="https://play.google.com/store/apps/details?id=com.aviadlavi.pocket" target="_blank" rel="noopener">Get Pocket on Google Play ↗</a>
+        <small>Free on Android</small>
+      </div>
+    </section>
+
+    <footer>
+      <nav aria-label="Legal">
+        <a href="https://aviad198.github.io/pocket-legal/privacy.html">Privacy Policy</a>
+        <a href="https://aviad198.github.io/pocket-legal/terms.html">Terms of Use</a>
+        <!-- Contact email goes here once one exists, e.g. <a href="mailto:...">Contact</a> -->
+      </nav>
+      <p>© Pocket. Made by one person, by hand.</p>
+    </footer>
+  </main>
+
 </body>
 </html>
